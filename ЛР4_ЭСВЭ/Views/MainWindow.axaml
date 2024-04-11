@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ЛР4_ЭСВЭ.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="350"
+		Width="400" Height="350"
+        x:Class="ЛР4_ЭСВЭ.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ЛР4_ЭСВЭ">
+
+    <Design.DataContext>
+		<vm:MainWindowViewModel/>
+    </Design.DataContext>
+	<Window.Styles>
+		<Style Selector="Grid > Button">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			
+			<Setter Property="Background" Value="#F14524"/>
+			<Setter Property="Foreground" Value="White"/>
+			
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+		<Style Selector="Grid > Border">
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="BorderBrush" Value="#848484"/>
+			<Setter Property="CornerRadius" Value="5"/>
+			
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+	</Window.Styles>
+	<Grid ColumnDefinitions="*, 5, *" RowDefinitions="*, 5, auto" Margin="20">
+		<Border Grid.ColumnSpan="3">
+			<Carousel SelectedIndex="{Binding CarouselIndex}">
+				<StackPanel HorizontalAlignment="Stretch" Spacing="5">
+					<TextBlock Text="ФИО"/>
+					<TextBox Text="{Binding FullName}"/>
+					<TextBlock Text="Номер телефона"/>
+					<TextBox Text="{Binding PhoneNumber}"/>
+					<TextBlock Text="Дата рождения"/>
+					<DatePicker SelectedDate="{Binding Date}"/>
+				</StackPanel>
+				<StackPanel HorizontalAlignment="Stretch" Spacing="5">
+					<CheckBox Content="Высшее образование" IsChecked="{Binding Education}"/>
+					<TextBlock Text="Средний балл"/>
+					<NumericUpDown Minimum="0" Increment="0.5" Value="{Binding AverageGrade}"/>
+					<CheckBox Content="Ученая степень" IsChecked="{Binding Degree}"/>
+					<CheckBox Content="Научное открытие" IsChecked="{Binding Discovery}"/>
+					<TextBlock Text="Стаж, полных лет"/>
+					<NumericUpDown Minimum="0" Increment="1" Value="{Binding Experience}"/>
+				</StackPanel>
+				<StackPanel HorizontalAlignment="Stretch" Spacing="5">
+					<TextBlock Text="Для проссмотра результата введите пароль"/>
+					<TextBox PasswordChar="*" Text="{Binding Password}"/>
+				</StackPanel>
+				<StackPanel HorizontalAlignment="Stretch" Spacing="5">
+					<TextBlock Text="Результат"/>
+					<TextBlock Text="{Binding FullName}"/>
+					<TextBlock Text="{Binding Date}"/>
+					<TextBlock Text="{Binding Result}"/>
+				</StackPanel>
+			</Carousel>
+		</Border>
+		
+		<Button Grid.Row="2"
+				Content="Назад" Command="{Binding Previous}" IsVisible="{CompiledBinding CarouselIndex}"/>
+		<Button Grid.Row="2" Grid.Column="2"
+				Content="{Binding NextButtonTitle}" Command="{Binding Next}"/>
+	</Grid>
+	
+	
+	
+    
+
+</Window>
