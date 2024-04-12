@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
-using System;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace ЛР4_ЭСВЭ.ViewModels
 {
@@ -7,34 +8,46 @@ namespace ЛР4_ЭСВЭ.ViewModels
     {
         #region Навигация по корусели
 
+        // Свойства
         private int _carouselIndex = 0;
         public int CarouselIndex
         {
             get => _carouselIndex;
-            set
-            {
-                _carouselIndex = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(NextButtonTitle));
-            }
+            set => this.RaiseAndSetIfChanged(ref _carouselIndex, value);
         }
-        public string NextButtonTitle => _carouselIndex switch
-        {
-            1 => "Готово",
-            2 => "Результат",
-            3 => "Завершить",
-            _ => "Вперед"
-        };
-        public void Next()
+
+        // Объявление команд
+        private ReactiveCommand<Unit, Unit>? _nextCommand;
+        private ReactiveCommand<Unit, Unit>? _previousCommand;
+
+        // Инициализация команд
+        public ReactiveCommand<Unit, Unit> NextCommand => _nextCommand ??= ReactiveCommand.Create(Next);
+        public ReactiveCommand<Unit, Unit> PreviousCommand => _previousCommand ??= ReactiveCommand.Create(Previous);
+
+        // Методы
+        private void Next()
         {
             if (CarouselIndex == 1) Result = GetResult();
             else if (CarouselIndex == 2 && Password != "Конспект составлен") return;
             else if (CarouselIndex == 3) SaveAndClear();
             CarouselIndex++;
         }
-        public void Previous() => CarouselIndex--;
+        private void Previous() => CarouselIndex--;
 
         #endregion
+
+        private readonly ObservableAsPropertyHelper<string> _nextButtonTitle;
+        public string NextButtonTitle => _nextButtonTitle.Value;
+        public MainWindowViewModel()
+        {
+            _nextButtonTitle = this.WhenAnyValue(vm => vm.CarouselIndex).Select(x => x switch {
+                1 => "Готово",
+                2 => "Результат",
+                3 => "Завершить",
+                _ => "Вперед"
+            }).ToProperty(this, vm => vm.NextButtonTitle);
+        }
+       
 
         private string? _fullName;
         private string? _phoneNumber;
@@ -100,15 +113,6 @@ namespace ЛР4_ЭСВЭ.ViewModels
 
         public void SaveAndClear() // вместо сохранения просто в консоль вывожу по фану
         {
-            Console.WriteLine(_fullName);
-            Console.WriteLine(_phoneNumber);
-            Console.WriteLine(_date);
-            Console.WriteLine(_education);
-            Console.WriteLine(_averageGrade);
-            Console.WriteLine(_degree);
-            Console.WriteLine(_discovery);
-            Console.WriteLine(_experience);
-            Console.WriteLine(_result);
             FullName = null;
             PhoneNumber = null;
             Date = null;

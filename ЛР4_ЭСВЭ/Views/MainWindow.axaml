@@ -13,6 +13,7 @@
     <Design.DataContext>
 		<vm:MainWindowViewModel/>
     </Design.DataContext>
+	
 	<Window.Styles>
 		<Style Selector="Grid > Button">
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -33,6 +34,7 @@
 			<Setter Property="Padding" Value="10"/>
 		</Style>
 	</Window.Styles>
+	
 	<Grid ColumnDefinitions="*, 5, *" RowDefinitions="*, 5, auto" Margin="20">
 		<Border Grid.ColumnSpan="3">
 			<Carousel SelectedIndex="{Binding CarouselIndex}">
@@ -67,13 +69,9 @@
 		</Border>
 		
 		<Button Grid.Row="2"
-				Content="Назад" Command="{Binding Previous}" IsVisible="{CompiledBinding CarouselIndex}"/>
+				Content="Назад" Command="{Binding PreviousCommand}" IsVisible="{CompiledBinding CarouselIndex}"/>
 		<Button Grid.Row="2" Grid.Column="2"
-				Content="{Binding NextButtonTitle}" Command="{Binding Next}"/>
+				Content="{Binding NextButtonTitle}" Command="{Binding NextCommand}"/>
 	</Grid>
 	
-	
-	
-    
-
 </Window>
